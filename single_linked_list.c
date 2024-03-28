@@ -75,7 +75,7 @@ void list_free(list_t *list){
 
 int list_prepend(list_t *list, int val){
     node_t* node = (node_t*)malloc(sizeof(node_t));
-   if(!node){
+    if(!node){
         return 1;
     }
     if(!list -> tail){
@@ -90,39 +90,33 @@ int list_prepend(list_t *list, int val){
 }
 
 int list_append(list_t *list, int val){
-    node_t* node = (node_t*)malloc(sizeof(node_t));
-    if(!node){
-        return 1;
-    }
-    node -> data = val;
     if(!list -> tail){
         list_prepend(list, val);
-	free(node);
         return 0;
+    } 
+    node_t* node = (node_t*)malloc(sizeof(node_t));
+    if(!node){
+	    return 1;
     }
-    else{
-        list -> tail -> next = node;
-        list -> tail = node;
-        node -> next = NULL;
-        list -> size++;
-        return 0;
-    }
+    node -> data = val;
+    list -> tail -> next = node;
+    list -> tail = node;
+    node -> next = NULL;
+    list -> size++;
+    return 0;
 }
 
 int list_insert(list_t *list, int val, size_t pos){
+    if(!list -> tail||pos <= 0){
+	    return list_prepend(list, val);
+    }
+    if(pos > list -> size - 1){
+	    return list_append(list, val);
+    }
     node_t *node = (node_t*)malloc(sizeof(node_t));
     if(!node){
 	    return 1;
     }
-    if(!list -> tail||pos <= 0){
-	    free(node);
-	    return list_prepend(list, val);
-    }
-    if(pos > list -> size - 1){
-	    free(node);
-	    return list_append(list, val);
-    }
-    
     node -> data = val;
     node_t *temp_pos = list -> head;
     for(int i = 0; i < pos-1; i++){
@@ -144,7 +138,7 @@ int list_rm(list_t *list, int *val, size_t pos){
         *val = temp_pos -> data; 
         free(temp_pos);
         list -> size--;
-	    return *val;
+	return *val;
     }
     else{
         for(int i = 0; i < pos-1; i++){
