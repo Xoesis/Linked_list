@@ -46,7 +46,7 @@ int main(){
     printNodes(list);
     printf("\n");
     
-    list_set(list, 3, 4);
+    list_set(list, 2, 1);
     printf("Current list size: %d\n", list -> size);
     printNodes(list);
 
